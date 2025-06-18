@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>WMS - Estoque Pizzaria</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+</head>
+<body>
+
+    <h1>WMS - Controle de Estoque</h1>
+
+    <div class="tabs">
+        <button onclick="showTab('cadastro')">Cadastro de Produto</button>
+        <button onclick="showTab('estoque')">Estoque</button>
+    </div>
+
+    <!-- Cadastro de Produto -->
+    <div id="cadastro" class="tab">
+        <h2>Cadastrar Novo Produto</h2>
+        <input type="text" id="nomeProduto" placeholder="Nome do Produto"><br>
+        <input type="text" id="codigoBarras" placeholder="Código de Barras (ou use a câmera)"><br>
+        <button onclick="startScanner()">Ler Código de Barras</button><br><br>
+        <button onclick="salvarProduto()">Salvar Produto</button>
+
+        <div id="camera"></div>
+    </div>
+
+    <!-- Visualização de Estoque -->
+    <div id="estoque" class="tab" style="display:none;">
+        <h2>Estoque Atual</h2>
+        <ul id="listaEstoque"></ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
