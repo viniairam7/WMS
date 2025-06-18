@@ -1,0 +1,21 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.tabs button {
+    margin-right: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tab {
+    margin-top: 20px;
+}
+
+#camera {
+    width: 300px;
+    height: 200px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
