@@ -1,5 +1,9 @@
 let estoque = [];
 
+window.onload = function () {
+    carregarEstoque();
+};
+
 function showTab(tabName) {
     document.getElementById('cadastro').style.display = 'none';
     document.getElementById('estoque').style.display = 'none';
@@ -11,11 +15,12 @@ function showTab(tabName) {
 }
 
 function salvarProduto() {
-    const nome = document.getElementById('nomeProduto').value;
-    const codigo = document.getElementById('codigoBarras').value;
+    const nome = document.getElementById('nomeProduto').value.trim();
+    const codigo = document.getElementById('codigoBarras').value.trim();
 
     if (nome && codigo) {
         estoque.push({ nome, codigo });
+        salvarNoLocalStorage();
         alert('Produto salvo!');
         document.getElementById('nomeProduto').value = '';
         document.getElementById('codigoBarras').value = '';
@@ -36,6 +41,17 @@ function renderEstoque() {
     });
 }
 
+function salvarNoLocalStorage() {
+    localStorage.setItem('estoquePizzaria', JSON.stringify(estoque));
+}
+
+function carregarEstoque() {
+    const dadosSalvos = localStorage.getItem('estoquePizzaria');
+    if (dadosSalvos) {
+        estoque = JSON.parse(dadosSalvos);
+    }
+}
+
 // --------- Barcode Scanner com QuaggaJS ---------
 function startScanner() {
     const cameraDiv = document.getElementById('camera');
@@ -48,7 +64,7 @@ function startScanner() {
             target: cameraDiv
         },
         decoder: {
-            readers: ["ean_reader"]  // Tipo de código de barras (exemplo: EAN para alimentos)
+            readers: ["ean_reader"]
         }
     }, function (err) {
         if (err) {
