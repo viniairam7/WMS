@@ -1,101 +1,123 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 0 10px;
-    background: #f9f9f9;
-    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #a8c0ff; /* Azul pastel */
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace; /* Monoespaçada */
+    text-align: center;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
+h1, h2 {
+    margin-top: 20px;
 }
 
 .tabs {
-    text-align: center;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .tabs button {
-    background-color: #a8d5ba; /* verde pastel */
+    background-color: #7aa0f8; /* Azul mais escuro */
     border: none;
-    padding: 10px 15px;
-    margin: 0 5px;
+    padding: 12px 24px;
+    margin: 5px;
     cursor: pointer;
     font-weight: bold;
-    border-radius: 5px;
+    color: white;
+    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 
-.tabs button:hover {
-    background-color: #7ebc8b;
-}
-
+.tabs button:hover,
 .tabs button.active {
-    background-color: #f5e27a; /* amarelo pastel */
-    color: #333;
+    background-color: #5a85f0;
 }
 
 input[type="text"], input[type="number"] {
-    width: calc(100% - 24px);
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 80%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
     font-size: 1em;
+    background-color: #5a85f0;
+    color: #fff;
+    text-align: center;
+}
+
+input::placeholder {
+    color: #e0e0e0;
 }
 
 button {
-    background-color: #f5e27a;
+    background-color: #7aa0f8;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     margin-top: 10px;
     cursor: pointer;
     font-weight: bold;
-    border-radius: 4px;
+    color: white;
+    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #d8c855;
+    background-color: #5a85f0;
 }
 
-.camera {
+#camera {
     width: 320px;
     height: 240px;
-    margin-top: 15px;
-    border: 2px solid #ccc;
+    margin: 20px auto;
+    border: 2px solid #ffffff;
     border-radius: 8px;
     overflow: hidden;
+    background-color: #5a85f0;
 }
 
 #listaEstoque {
     list-style-type: none;
-    padding-left: 0;
+    padding: 0;
+    margin-top: 20px;
 }
 
 #listaEstoque li {
-    background-color: #fff;
-    margin-bottom: 10px;
-    padding: 12px;
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    background-color: #5a85f0;
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 8px;
+    width: 80%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: white;
 }
 
 #listaEstoque li button {
-    background-color: #e57373;
-    color: white;
+    background-color: #ff5c5c;
+    padding: 8px 12px;
+    border-radius: 6px;
     border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-weight: normal;
     cursor: pointer;
+    color: white;
+    font-weight: bold;
 }
 
 #listaEstoque li button:hover {
-    background-color: #c94c4c;
+    background-color: #e64444;
+}
+
+#filtro {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border: none;
+    background-color: #5a85f0;
+    color: white;
+    text-align: center;
+}
+
+#filtro::placeholder {
+    color: #e0e0e0;
 }
