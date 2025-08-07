@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <title>WMS - Controle de Estoque</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WMS - Controle de Estoque</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
@@ -10,15 +11,23 @@
 
     <h1>WMS - Controle de Estoque</h1>
 
-    <div class="tabs">
+    <section id="login" class="tab">
+        <h2>Acesso ao Sistema</h2>
+        <input type="text" id="cnpj" placeholder="CNPJ da Loja" />
+        <input type="password" id="senha" placeholder="Senha" />
+        <button onclick="fazerLogin()">Entrar</button>
+    </section>
+
+    <div class="tabs" style="display:none;" id="mainTabs">
         <button onclick="showTab('cadastro')" id="btn-cadastro">Cadastro de Produto</button>
         <button onclick="showTab('estoque')" id="btn-estoque">Estoque</button>
     </div>
 
-    <section id="cadastro" class="tab">
+    <section id="cadastro" class="tab" style="display:none;">
         <h2>Cadastrar Produto</h2>
         <input type="text" id="nomeProduto" placeholder="Nome do Produto" />
         <input type="text" id="codigoBarras" placeholder="Código de Barras (ou use a câmera)" />
+        <input type="text" id="ruaProduto" placeholder="Rua de Armazenamento" />
         <input type="number" id="quantidade" placeholder="Quantidade" min="1" value="1" />
         <br />
         <button onclick="startScanner()">Ler Código de Barras</button>
@@ -29,11 +38,8 @@
 
     <section id="estoque" class="tab" style="display:none;">
         <h2>Estoque Atual</h2>
-
         <input type="text" id="filtro" placeholder="Buscar por nome ou código" oninput="filtrarEstoque()" />
-
         <ul id="listaEstoque"></ul>
-
         <button onclick="exportarCSV()">Exportar para CSV</button>
     </section>
 
