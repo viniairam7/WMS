@@ -1,10 +1,30 @@
 let estoque = [];
+let lojaCNPJ = '';
+
+
+const CREDENCIAIS = {
+    '12345678000190': 'senha123', 
+    '98765432000101': 'outrasenha' 
+};
 
 window.onload = function () {
-    carregarEstoque();
-    showTab('cadastro');
-    marcarBotaoAtivo('btn-cadastro');
+ 
 };
+
+function fazerLogin() {
+    const cnpj = document.getElementById('cnpj').value;
+    const senha = document.getElementById('senha').value;
+
+    if (CREDENCIAIS[cnpj] && CREDENCIAIS[cnpj] === senha) {
+        lojaCNPJ = cnpj;
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('mainTabs').style.display = 'flex';
+        carregarEstoque();
+        showTab('cadastro');
+    } else {
+        alert('CNPJ ou senha incorretos.');
+    }
+}
 
 function showTab(tabName) {
     document.getElementById('cadastro').style.display = 'none';
@@ -28,6 +48,7 @@ function marcarBotaoAtivo(id) {
 function salvarProduto() {
     const nome = document.getElementById('nomeProduto').value.trim();
     const codigo = document.getElementById('codigoBarras').value.trim();
+    const rua = document.getElementById('ruaProduto').value.trim();
     const quantidade = parseInt(document.getElementById('quantidade').value);
 
     if (!nome) {
@@ -38,19 +59,20 @@ function salvarProduto() {
         alert('Por favor, preencha o código de barras.');
         return;
     }
+    if (!rua) {
+        alert('Por favor, preencha a Rua de Armazenamento.');
+        return;
+    }
     if (!quantidade || quantidade <= 0) {
         alert('Quantidade inválida.');
         return;
     }
 
-    // Verifica se o produto já existe (pelo código)
     const idx = estoque.findIndex(p => p.codigo === codigo);
     if (idx >= 0) {
-        // Atualiza quantidade do produto existente
         estoque[idx].quantidade += quantidade;
     } else {
-        // Adiciona novo produto
-        estoque.push({ nome, codigo, quantidade });
+        estoque.push({ nome, codigo, rua, quantidade });
     }
 
     salvarNoLocalStorage();
@@ -62,6 +84,7 @@ function salvarProduto() {
 function limparFormulario() {
     document.getElementById('nomeProduto').value = '';
     document.getElementById('codigoBarras').value = '';
+    document.getElementById('ruaProduto').value = '';
     document.getElementById('quantidade').value = 1;
 }
 
@@ -73,7 +96,8 @@ function renderEstoque(filtrarTexto = '') {
     if (filtrarTexto) {
         filtrado = estoque.filter(item =>
             item.nome.toLowerCase().includes(filtrarTexto.toLowerCase()) ||
-            item.codigo.includes(filtrarTexto)
+            item.codigo.includes(filtrarTexto) ||
+            item.rua.toLowerCase().includes(filtrarTexto.toLowerCase())
         );
     }
 
@@ -88,6 +112,7 @@ function renderEstoque(filtrarTexto = '') {
             <div>
                 <strong>${item.nome}</strong><br />
                 Código: ${item.codigo}<br />
+                Rua: ${item.rua}<br />
                 Quantidade: ${item.quantidade}
             </div>
             <button onclick="removerProduto('${item.codigo}')">Excluir</button>
@@ -110,17 +135,18 @@ function removerProduto(codigo) {
 }
 
 function salvarNoLocalStorage() {
-    localStorage.setItem('estoquePizzaria', JSON.stringify(estoque));
+    localStorage.setItem(`estoque-${lojaCNPJ}`, JSON.stringify(estoque));
 }
 
 function carregarEstoque() {
-    const dados = localStorage.getItem('estoquePizzaria');
+    const dados = localStorage.getItem(`estoque-${lojaCNPJ}`);
     if (dados) {
         estoque = JSON.parse(dados);
+    } else {
+        estoque = [];
     }
 }
 
-// --------- Scanner de código de barras ---------
 function startScanner() {
     const cameraDiv = document.getElementById('camera');
     cameraDiv.innerHTML = '';
