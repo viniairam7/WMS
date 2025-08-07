@@ -39,7 +39,7 @@ h1, h2 {
     background-color: #5a85f0;
 }
 
-input[type="text"], input[type="number"] {
+input[type="text"], input[type="number"], input[type="password"] {
     width: 90%; /* Increased width for better mobile input */
     max-width: 400px; /* Max width for inputs */
     padding: 15px; /* Increased padding */
@@ -151,6 +151,10 @@ button:hover {
     color: #e0e0e0;
 }
 
+#login {
+    margin-top: 50px;
+}
+
 /* Media Queries for smaller screens */
 @media (max-width: 768px) {
     h1 {
@@ -167,7 +171,7 @@ button:hover {
         margin: 5px;
     }
 
-    input[type="text"], input[type="number"], button, #filtro {
+    input[type="text"], input[type="number"], input[type="password"], button, #filtro {
         width: 95%; /* Even wider on very small screens */
         font-size: 1em;
         padding: 12px;
