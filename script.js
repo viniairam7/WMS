@@ -27,17 +27,40 @@ function fazerLogin() {
 }
 
 function showTab(tabName) {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('cadastroLoja').style.display = 'none';
     document.getElementById('cadastro').style.display = 'none';
     document.getElementById('estoque').style.display = 'none';
+
     document.getElementById(tabName).style.display = 'block';
 
     if (tabName === 'estoque') {
         renderEstoque();
         marcarBotaoAtivo('btn-estoque');
-    } else {
+    } else if (tabName === 'cadastro') {
         marcarBotaoAtivo('btn-cadastro');
     }
 }
+
+function salvarLoja() {
+    const cnpj = document.getElementById('cnpjCadastro').value;
+    const senha = document.getElementById('senhaCadastro').value;
+
+    if (!cnpj || !senha) {
+        alert('Por favor, preencha todos os campos.');
+        return;
+    }
+
+    if (CREDENCIAIS[cnpj]) {
+        alert('Este CNPJ já está cadastrado.');
+        return;
+    }
+
+    CREDENCIAIS[cnpj] = senha;
+    alert('Loja cadastrada com sucesso! Faça o login para continuar.');
+    showTab('login');
+}
+
 
 function marcarBotaoAtivo(id) {
     document.getElementById('btn-cadastro').classList.remove('active');
