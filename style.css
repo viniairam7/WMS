@@ -1,11 +1,13 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #a8c0ff; /* Azul pastel */
+    /* Gradiente de azul escuro */
+    background: linear-gradient(to right, #0a1931, #1f2e4d);
     color: #ffffff;
-    font-family: 'Courier New', Courier, monospace; /* Monoespaçada */
+    /* Fonte mais robusta */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: center;
-    font-size: 16px; /* Base font size for better readability */
+    font-size: 16px;
 }
 
 h1, h2 {
@@ -47,7 +49,9 @@ input[type="text"], input[type="number"], input[type="password"] {
     border: none;
     border-radius: 8px; /* Slightly more rounded */
     font-size: 1.1em; /* Larger font size for inputs */
-    background-color: #5a85f0;
+    /* Fundo semi-transparente para o novo gradiente */
+    background-color: rgba(255, 255, 255, 0.1); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
     text-align: center;
     display: block; /* Ensure inputs take full line */
@@ -76,6 +80,19 @@ button {
 
 button:hover {
     background-color: #5a85f0;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-top: 15px;
+    display: block;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #5a85f0;
 }
 
 #camera {
@@ -151,7 +168,7 @@ button:hover {
     color: #e0e0e0;
 }
 
-#login {
+#login, #cadastroLoja {
     margin-top: 50px;
 }
 
