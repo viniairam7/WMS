@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WMS - Controle de Estoque</title>
+    <title>WMS - Controle Estoque</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
@@ -16,6 +16,15 @@
         <input type="text" id="cnpj" placeholder="CNPJ da Loja" />
         <input type="password" id="senha" placeholder="Senha" />
         <button onclick="fazerLogin()">Entrar</button>
+        <a href="#" onclick="showTab('cadastroLoja')">Não tenho cadastro, quero cadastrar minha loja.</a>
+    </section>
+
+    <section id="cadastroLoja" class="tab" style="display:none;">
+        <h2>Cadastrar Loja</h2>
+        <input type="text" id="cnpjCadastro" placeholder="CNPJ da Loja" />
+        <input type="password" id="senhaCadastro" placeholder="Criar Senha" />
+        <button onclick="salvarLoja()">Cadastrar Loja</button>
+        <a href="#" onclick="showTab('login')">Voltar para o Login</a>
     </section>
 
     <div class="tabs" style="display:none;" id="mainTabs">
