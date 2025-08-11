@@ -39,7 +39,7 @@ app.post('/api/estoque', (req, res) => {
         db.data.estoque.push({ nome, codigo, rua, quantidade });
     }
     db.write();
-    res.status(200).json({ message: 'Produto salvo com sucesso.' });
+    res.status(200).json({ message: 'Produto salvo com sucesso!' });
 });
 
 app.delete('/api/estoque/:codigo', (req, res) => {
