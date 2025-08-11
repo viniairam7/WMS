@@ -1,0 +1,225 @@
+body {
+    margin: 0;
+    padding: 0;
+    /* Gradiente de azul escuro */
+    background: linear-gradient(to right, #0a1931, #1f2e4d);
+    color: #ffffff;
+    /* Fonte mais robusta */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-align: center;
+    font-size: 16px;
+}
+
+h1, h2 {
+    margin-top: 20px;
+    font-size: 1.8em; /* Slightly larger for emphasis */
+}
+
+.tabs {
+    margin-top: 20px;
+    display: flex; /* Use flexbox for tabs */
+    justify-content: center;
+    flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+}
+
+.tabs button {
+    background-color: #7aa0f8; /* Azul mais escuro */
+    border: none;
+    padding: 15px 25px; /* Increased padding for easier tapping */
+    margin: 8px; /* Increased margin */
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    border-radius: 8px; /* Slightly more rounded */
+    transition: background-color 0.3s ease;
+    flex-grow: 1; /* Allow buttons to grow */
+    max-width: 200px; /* Max width for individual buttons */
+}
+
+.tabs button:hover,
+.tabs button.active {
+    background-color: #5a85f0;
+}
+
+input[type="text"], input[type="number"], input[type="password"] {
+    width: 90%; /* Increased width for better mobile input */
+    max-width: 400px; /* Max width for inputs */
+    padding: 15px; /* Increased padding */
+    margin: 12px auto; /* Centered with auto margins */
+    border: none;
+    border-radius: 8px; /* Slightly more rounded */
+    font-size: 1.1em; /* Larger font size for inputs */
+    /* Fundo semi-transparente para o novo gradiente */
+    background-color: rgba(255, 255, 255, 0.1); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    text-align: center;
+    display: block; /* Ensure inputs take full line */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+input::placeholder {
+    color: #e0e0e0;
+}
+
+button {
+    background-color: #7aa0f8;
+    border: none;
+    padding: 15px 25px; /* Increased padding */
+    margin: 10px auto; /* Centered with auto margins */
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    border-radius: 8px; /* Slightly more rounded */
+    transition: background-color 0.3s ease;
+    display: block; /* Ensure buttons take full line */
+    width: 90%; /* Increased width */
+    max-width: 300px; /* Max width for buttons */
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: #5a85f0;
+}
+
+a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-top: 15px;
+    display: block;
+    font-size: 0.9em;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #5a85f0;
+}
+
+#camera {
+    width: 90%; /* Make camera responsive */
+    max-width: 320px; /* Keep a max-width */
+    height: 240px;
+    margin: 20px auto;
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #5a85f0;
+}
+
+#listaEstoque {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#listaEstoque li {
+    background-color: #5a85f0;
+    margin: 12px auto; /* Adjusted margin */
+    padding: 18px; /* Increased padding */
+    border-radius: 10px; /* More rounded */
+    width: 90%; /* Increased width */
+    max-width: 500px; /* Max width for list items */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Enhanced shadow */
+    display: flex;
+    flex-direction: column; /* Stack content vertically on small screens */
+    align-items: flex-start; /* Align text to the start */
+    color: white;
+    text-align: left; /* Align text within list item */
+}
+
+#listaEstoque li div {
+    margin-bottom: 10px; /* Space between text and button */
+    width: 100%; /* Ensure text div takes full width */
+}
+
+#listaEstoque li button {
+    background-color: #ff5c5c;
+    padding: 10px 15px; /* Adjusted padding */
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    align-self: flex-end; /* Align button to the end */
+    width: auto; /* Allow button to size naturally */
+    max-width: none; /* Remove max-width constraint for this button */
+    margin: 0; /* Reset margin */
+}
+
+#listaEstoque li button:hover {
+    background-color: #e64444;
+}
+
+#filtro {
+    width: 90%; /* Increased width for filter */
+    max-width: 400px; /* Max width for filter */
+    padding: 15px; /* Increased padding */
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #5a85f0;
+    color: white;
+    text-align: center;
+    font-size: 1.1em; /* Larger font size for filter */
+    box-sizing: border-box;
+}
+
+#filtro::placeholder {
+    color: #e0e0e0;
+}
+
+#login, #cadastroLoja {
+    margin-top: 50px;
+}
+
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.6em;
+    }
+
+    h2 {
+        font-size: 1.4em;
+    }
+
+    .tabs button {
+        padding: 12px 20px;
+        font-size: 0.9em;
+        margin: 5px;
+    }
+
+    input[type="text"], input[type="number"], input[type="password"], button, #filtro {
+        width: 95%; /* Even wider on very small screens */
+        font-size: 1em;
+        padding: 12px;
+    }
+
+    #listaEstoque li {
+        padding: 15px;
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.4em;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    .tabs button {
+        width: 90%; /* Make tabs stack on very small screens */
+        max-width: none;
+    }
+
+    #listaEstoque li {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    #listaEstoque li button {
+        padding: 8px 10px;
+    }
+}
