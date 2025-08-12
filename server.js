@@ -10,7 +10,7 @@ const db = new LowSync(adapter);
 
 async function inicializarDB() {
     db.read();
-    db.data ||= { estoque: [] };
+    db.data ||= { estoque: [], lojas: {} }; // Adicionando 'lojas' para armazenar credenciais
     db.write();
 }
 
@@ -22,26 +22,35 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-app.get('/api/estoque', (req, res) => {
+// Rota para obter todos os produtos do estoque
+app.get('/api/estoque/:cnpj', (req, res) => {
     db.read();
-    res.json(db.data.estoque);
+    const { cnpj } = req.params;
+    const estoqueLoja = db.data.estoque.filter(p => p.cnpj === cnpj);
+    res.json(estoqueLoja);
 });
 
+// Rota para adicionar ou atualizar um produto
 app.post('/api/estoque', (req, res) => {
     db.read();
-    const { nome, codigo, rua, quantidade } = req.body;
+    const { cnpj, nome, codigo, rua, quantidade } = req.body;
     
-    const produtoExistente = db.data.estoque.find(p => p.codigo === codigo);
+    // Filtra o estoque para a loja específica
+    const estoqueLoja = db.data.estoque.filter(p => p.cnpj === cnpj);
+    const produtoExistente = estoqueLoja.find(p => p.codigo === codigo);
     
     if (produtoExistente) {
+        // Se existir, atualiza a quantidade
         produtoExistente.quantidade += quantidade;
     } else {
-        db.data.estoque.push({ nome, codigo, rua, quantidade });
+        // Se não existir, adiciona um novo produto com o CNPJ da loja
+        db.data.estoque.push({ cnpj, nome, codigo, rua, quantidade });
     }
     db.write();
     res.status(200).json({ message: 'Produto salvo com sucesso!' });
 });
 
+// Rota para remover um produto
 app.delete('/api/estoque/:codigo', (req, res) => {
     db.read();
     const { codigo } = req.params;
@@ -49,6 +58,33 @@ app.delete('/api/estoque/:codigo', (req, res) => {
     db.write();
     res.status(200).json({ message: 'Produto removido com sucesso.' });
 });
+
+// Rota para cadastrar uma nova loja
+app.post('/api/cadastroLoja', (req, res) => {
+    db.read();
+    const { cnpj, senha } = req.body;
+
+    if (db.data.lojas[cnpj]) {
+        return res.status(409).json({ message: 'Este CNPJ já está cadastrado.' });
+    }
+    
+    db.data.lojas[cnpj] = senha;
+    db.write();
+    res.status(201).json({ message: 'Loja cadastrada com sucesso!' });
+});
+
+// Rota para login da loja
+app.post('/api/login', (req, res) => {
+    db.read();
+    const { cnpj, senha } = req.body;
+
+    if (db.data.lojas[cnpj] && db.data.lojas[cnpj] === senha) {
+        return res.status(200).json({ message: 'Login bem-sucedido.' });
+    }
+
+    res.status(401).json({ message: 'CNPJ ou senha incorretos.' });
+});
+
 
 app.listen(port, () => {
     console.log(`Backend rodando em http://localhost:${port}`);
