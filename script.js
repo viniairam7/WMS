@@ -1,27 +1,38 @@
 let lojaCNPJ = '';
 
-const CREDENCIAIS = {
-    '12345678000190': 'senha123', 
-    '98765432000101': 'outrasenha' 
-};
+// As credenciais agora serão gerenciadas pelo backend
+// const CREDENCIAIS = { ... };
 
 window.onload = function () {
-    // Não é mais necessário carregar do localStorage
+    // A lógica de carregamento inicial será refeita
 };
 
 function fazerLogin() {
     const cnpj = document.getElementById('cnpj').value;
     const senha = document.getElementById('senha').value;
 
-    if (CREDENCIAIS[cnpj] && CREDENCIAIS[cnpj] === senha) {
-        lojaCNPJ = cnpj;
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('mainTabs').style.display = 'flex';
-        carregarEstoque();
-        showTab('cadastro');
-    } else {
-        alert('CNPJ ou senha incorretos.');
-    }
+    fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cnpj, senha })
+    })
+    .then(response => {
+        if (response.status === 200) {
+            lojaCNPJ = cnpj;
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('mainTabs').style.display = 'flex';
+            carregarEstoque();
+            showTab('cadastro');
+        } else {
+            return response.json().then(data => alert(data.message));
+        }
+    })
+    .catch(error => {
+        console.error('Erro de login:', error);
+        alert('Erro ao tentar fazer login.');
+    });
 }
 
 function showTab(tabName) {
@@ -49,14 +60,24 @@ function salvarLoja() {
         return;
     }
 
-    if (CREDENCIAIS[cnpj]) {
-        alert('Este CNPJ já está cadastrado.');
-        return;
-    }
-
-    CREDENCIAIS[cnpj] = senha;
-    alert('Loja cadastrada com sucesso! Faça o login para continuar.');
-    showTab('login');
+    fetch('http://localhost:3000/api/cadastroLoja', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cnpj, senha })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (response.ok) {
+            showTab('login');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao cadastrar loja:', error);
+        alert('Erro ao cadastrar loja.');
+    });
 }
 
 
@@ -77,7 +98,7 @@ function salvarProduto() {
         return;
     }
 
-    const novoProduto = { nome, codigo, rua, quantidade };
+    const novoProduto = { cnpj: lojaCNPJ, nome, codigo, rua, quantidade };
 
     fetch('http://localhost:3000/api/estoque', {
         method: 'POST',
@@ -163,7 +184,7 @@ function removerProduto(codigo) {
 
 // Essa função agora busca os dados do backend
 function carregarEstoque(filtro = '') {
-    fetch('http://localhost:3000/api/estoque')
+    fetch(`http://localhost:3000/api/estoque/${lojaCNPJ}`)
     .then(response => response.json())
     .then(estoqueData => {
         renderEstoque(estoqueData, filtro);
