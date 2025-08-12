@@ -30,6 +30,7 @@
     <div class="tabs" style="display:none;" id="mainTabs">
         <button onclick="showTab('cadastro')" id="btn-cadastro">Cadastro de Produto</button>
         <button onclick="showTab('estoque')" id="btn-estoque">Estoque</button>
+        <button onclick="showTab('buscarProduto')" id="btn-buscar">Buscar Produto</button>
     </div>
 
     <section id="cadastro" class="tab" style="display:none;">
@@ -50,6 +51,15 @@
         <input type="text" id="filtro" placeholder="Buscar por nome ou código" oninput="filtrarEstoque()" />
         <ul id="listaEstoque"></ul>
         <button onclick="exportarCSV()">Exportar para CSV</button>
+    </section>
+
+    <section id="buscarProduto" class="tab" style="display:none;">
+        <h2>Buscar Produto</h2>
+        <input type="text" id="codigoBarrasBusca" placeholder="Código de Barras (ou use a câmera)" />
+        <br />
+        <button onclick="startScannerBusca()">Ler Código de Barras para Buscar</button>
+        <button onclick="buscarProdutoPorCodigo()">Buscar Produto</button>
+        <div id="resultadoBusca" style="margin-top: 20px;"></div>
     </section>
 
     <script src="script.js"></script>
