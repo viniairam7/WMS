@@ -22,7 +22,7 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-// Rota para obter todos os produtos do estoque
+// Rota para obter todos os produtos do estoque de uma loja específica
 app.get('/api/estoque/:cnpj', (req, res) => {
     db.read();
     const { cnpj } = req.params;
@@ -83,6 +83,21 @@ app.post('/api/login', (req, res) => {
     }
 
     res.status(401).json({ message: 'CNPJ ou senha incorretos.' });
+});
+
+// ==================================================
+// ROTA PARA A NOVA FUNCIONALIDADE DE BUSCA
+// ==================================================
+app.get('/api/estoque/buscar/:codigo', (req, res) => {
+    db.read();
+    const { codigo } = req.params;
+    const produto = db.data.estoque.find(p => p.codigo === codigo);
+
+    if (produto) {
+        res.status(200).json(produto);
+    } else {
+        res.status(404).json({ message: 'Produto não encontrado.' });
+    }
 });
 
 
