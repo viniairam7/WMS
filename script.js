@@ -40,6 +40,7 @@ function showTab(tabName) {
     document.getElementById('cadastroLoja').style.display = 'none';
     document.getElementById('cadastro').style.display = 'none';
     document.getElementById('estoque').style.display = 'none';
+    document.getElementById('buscarProduto').style.display = 'none';
     
     document.getElementById(tabName).style.display = 'block';
 
@@ -48,6 +49,11 @@ function showTab(tabName) {
         marcarBotaoAtivo('btn-estoque');
     } else if (tabName === 'cadastro') {
         marcarBotaoAtivo('btn-cadastro');
+    } else if (tabName === 'buscarProduto') {
+        marcarBotaoAtivo('btn-buscar');
+        // Limpar o resultado da busca quando a aba é acessada
+        document.getElementById('resultadoBusca').innerHTML = '';
+        document.getElementById('codigoBarrasBusca').value = '';
     }
 }
 
@@ -70,6 +76,7 @@ function salvarLoja() {
     .then(response => response.json())
     .then(data => {
         alert(data.message);
+        // Acessar a propriedade ok da resposta original, não do data
         if (response.ok) {
             showTab('login');
         }
@@ -80,10 +87,14 @@ function salvarLoja() {
     });
 }
 
-
 function marcarBotaoAtivo(id) {
     document.getElementById('btn-cadastro').classList.remove('active');
     document.getElementById('btn-estoque').classList.remove('active');
+    // Adicionar a classe 'active' para o novo botão de buscar
+    const btnBuscar = document.getElementById('btn-buscar');
+    if (btnBuscar) {
+        btnBuscar.classList.remove('active');
+    }
     document.getElementById(id).classList.add('active');
 }
 
@@ -195,10 +206,43 @@ function carregarEstoque(filtro = '') {
     });
 }
 
-function startScanner() {
+// ===============================================
+// FUNÇÕES PARA A NOVA FUNCIONALIDADE DE BUSCA
+// ===============================================
+
+function buscarProdutoPorCodigo() {
+    const codigo = document.getElementById('codigoBarrasBusca').value.trim();
+    if (!codigo) {
+        alert('Por favor, insira um código de barras.');
+        return;
+    }
+
+    fetch(`http://localhost:3000/api/estoque/buscar/${codigo}`)
+        .then(response => response.json())
+        .then(data => {
+            const resultadoDiv = document.getElementById('resultadoBusca');
+            if (data.rua) {
+                resultadoDiv.innerHTML = `
+                    <p><strong>Nome:</strong> ${data.nome}</p>
+                    <p><strong>Código:</strong> ${data.codigo}</p>
+                    <p><strong>Localização:</strong> Rua ${data.rua}</p>
+                    <p><strong>Quantidade:</strong> ${data.quantidade}</p>
+                `;
+            } else {
+                resultadoDiv.innerHTML = `<p><em>${data.message}</em></p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Erro na busca:', error);
+            alert('Erro ao buscar o produto.');
+        });
+}
+
+
+function startScannerBusca() {
     const cameraDiv = document.getElementById('camera');
     cameraDiv.innerHTML = '';
-
+    
     Quagga.init({
         inputStream: {
             name: "Live",
@@ -228,12 +272,20 @@ function startScanner() {
 
     Quagga.onDetected(function (data) {
         const codigo = data.codeResult.code;
-        document.getElementById('codigoBarras').value = codigo;
+        document.getElementById('codigoBarrasBusca').value = codigo;
         alert(`Código detectado: ${codigo}`);
-        stopScanner();
+        stopScannerBusca();
+        buscarProdutoPorCodigo();
     });
 }
 
+function stopScannerBusca() {
+    if (Quagga.running) {
+        Quagga.stop();
+    }
+}
+
+// A função stopScanner original também precisa ser ajustada para parar ambos os scanners
 function stopScanner() {
     if (Quagga.running) {
         Quagga.stop();
