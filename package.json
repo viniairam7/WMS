@@ -1,6 +1,7 @@
 {
   "name": "wms-main",
   "version": "1.0.0",
+  "type": "module",
   "description": "This is a simple web-based Warehouse Management System (WMS) designed for small businesses like pizzerias. It allows you to:",
   "main": "script.js",
   "scripts": {
@@ -10,9 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
- "dependencies": {
-  "cors": "^2.8.5",
-  "express": "^5.1.0",
-  "lowdb": "^5.1.0"
-}
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "lowdb": "^5.1.0"
+  }
 }
