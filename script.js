@@ -11,7 +11,7 @@ function fazerLogin() {
     const cnpj = document.getElementById('cnpj').value;
     const senha = document.getElementById('senha').value;
 
-    fetch('http://localhost:3000/api/login', {
+    fetch('https://wmsback2.onrender.com/api/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -66,20 +66,24 @@ function salvarLoja() {
         return;
     }
 
-    fetch('http://localhost:3000/api/cadastroLoja', {
+    fetch('https://wmsback2.onrender.com/api/cadastroLoja', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ cnpj, senha })
     })
-    .then(response => response.json())
+    .then(response => {
+        // Acessar a propriedade ok da resposta original antes de convertê-la
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Erro ao cadastrar loja.');
+        }
+    })
     .then(data => {
         alert(data.message);
-        // Acessar a propriedade ok da resposta original, não do data
-        if (response.ok) {
-            showTab('login');
-        }
+        showTab('login');
     })
     .catch(error => {
         console.error('Erro ao cadastrar loja:', error);
@@ -111,7 +115,7 @@ function salvarProduto() {
 
     const novoProduto = { cnpj: lojaCNPJ, nome, codigo, rua, quantidade };
 
-    fetch('http://localhost:3000/api/estoque', {
+    fetch('https://wmsback2.onrender.com/api/estoque', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -178,7 +182,7 @@ function filtrarEstoque() {
 
 function removerProduto(codigo) {
     if (confirm('Deseja realmente excluir este produto?')) {
-        fetch(`http://localhost:3000/api/estoque/${codigo}`, {
+        fetch(`https://wmsback2.onrender.com/api/estoque/${codigo}`, {
             method: 'DELETE'
         })
         .then(response => response.json())
@@ -195,7 +199,7 @@ function removerProduto(codigo) {
 
 // Essa função agora busca os dados do backend
 function carregarEstoque(filtro = '') {
-    fetch(`http://localhost:3000/api/estoque/${lojaCNPJ}`)
+    fetch(`https://wmsback2.onrender.com/api/estoque/${lojaCNPJ}`)
     .then(response => response.json())
     .then(estoqueData => {
         renderEstoque(estoqueData, filtro);
@@ -217,7 +221,7 @@ function buscarProdutoPorCodigo() {
         return;
     }
 
-    fetch(`http://localhost:3000/api/estoque/buscar/${codigo}`)
+    fetch(`https://wmsback2.onrender.com/api/estoque/buscar/${codigo}`)
         .then(response => response.json())
         .then(data => {
             const resultadoDiv = document.getElementById('resultadoBusca');
