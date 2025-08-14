@@ -2,66 +2,65 @@ const express = require('express');
 const cors = require('cors');
 
 // Importação corrigida para lowdb v5+
-const { LowSync, JSONFileSync } = require('lowdb');
+const { Low, JSONFile } = require('lowdb');
+const { dirname } = require('path');
+const { fileURLToPath } = require('url');
 
-const file = 'db.json';
-const adapter = new JSONFileSync(file);
-const db = new LowSync(adapter);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const file = new URL('db.json', import.meta.url);
+const db = new Low(new JSONFile(file));
 
 async function inicializarDB() {
-    db.read();
-    db.data ||= { estoque: [], lojas: {} }; // Adicionando 'lojas' para armazenar credenciais
-    db.write();
+    await db.read();
+    db.data ||= { estoque: [], lojas: {} };
+    await db.write();
 }
 
 inicializarDB();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
 
 // Rota para obter todos os produtos do estoque de uma loja específica
-app.get('/api/estoque/:cnpj', (req, res) => {
-    db.read();
+app.get('/api/estoque/:cnpj', async (req, res) => {
+    await db.read();
     const { cnpj } = req.params;
     const estoqueLoja = db.data.estoque.filter(p => p.cnpj === cnpj);
     res.json(estoqueLoja);
 });
 
 // Rota para adicionar ou atualizar um produto
-app.post('/api/estoque', (req, res) => {
-    db.read();
+app.post('/api/estoque', async (req, res) => {
+    await db.read();
     const { cnpj, nome, codigo, rua, quantidade } = req.body;
     
-    // Filtra o estoque para a loja específica
-    const estoqueLoja = db.data.estoque.filter(p => p.cnpj === cnpj);
-    const produtoExistente = estoqueLoja.find(p => p.codigo === codigo);
+    const produtoExistente = db.data.estoque.find(p => p.codigo === codigo && p.cnpj === cnpj);
     
     if (produtoExistente) {
-        // Se existir, atualiza a quantidade
         produtoExistente.quantidade += quantidade;
     } else {
-        // Se não existir, adiciona um novo produto com o CNPJ da loja
         db.data.estoque.push({ cnpj, nome, codigo, rua, quantidade });
     }
-    db.write();
+    await db.write();
     res.status(200).json({ message: 'Produto salvo com sucesso!' });
 });
 
 // Rota para remover um produto
-app.delete('/api/estoque/:codigo', (req, res) => {
-    db.read();
+app.delete('/api/estoque/:codigo', async (req, res) => {
+    await db.read();
     const { codigo } = req.params;
     db.data.estoque = db.data.estoque.filter(p => p.codigo !== codigo);
-    db.write();
+    await db.write();
     res.status(200).json({ message: 'Produto removido com sucesso.' });
 });
 
 // Rota para cadastrar uma nova loja
-app.post('/api/cadastroLoja', (req, res) => {
-    db.read();
+app.post('/api/cadastroLoja', async (req, res) => {
+    await db.read();
     const { cnpj, senha } = req.body;
 
     if (db.data.lojas[cnpj]) {
@@ -69,13 +68,13 @@ app.post('/api/cadastroLoja', (req, res) => {
     }
     
     db.data.lojas[cnpj] = senha;
-    db.write();
+    await db.write();
     res.status(201).json({ message: 'Loja cadastrada com sucesso!' });
 });
 
 // Rota para login da loja
-app.post('/api/login', (req, res) => {
-    db.read();
+app.post('/api/login', async (req, res) => {
+    await db.read();
     const { cnpj, senha } = req.body;
 
     if (db.data.lojas[cnpj] && db.data.lojas[cnpj] === senha) {
@@ -85,11 +84,8 @@ app.post('/api/login', (req, res) => {
     res.status(401).json({ message: 'CNPJ ou senha incorretos.' });
 });
 
-// ==================================================
-// ROTA PARA A NOVA FUNCIONALIDADE DE BUSCA
-// ==================================================
-app.get('/api/estoque/buscar/:codigo', (req, res) => {
-    db.read();
+app.get('/api/estoque/buscar/:codigo', async (req, res) => {
+    await db.read();
     const { codigo } = req.params;
     const produto = db.data.estoque.find(p => p.codigo === codigo);
 
