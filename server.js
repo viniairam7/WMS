@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { Low, JSONFile } = require('lowdb'); // Alterado para a sintaxe assíncrona
+const { Low, JSONFile } = require('lowdb');
 
 const file = path.join(__dirname, 'db.json');
 const adapter = new JSONFile(file);
@@ -21,7 +21,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// Rota para obter todos os produtos do estoque de uma loja específica
 app.get('/api/estoque/:cnpj', async (req, res) => {
     await db.read();
     const { cnpj } = req.params;
@@ -29,7 +28,6 @@ app.get('/api/estoque/:cnpj', async (req, res) => {
     res.json(estoqueLoja);
 });
 
-// Rota para adicionar ou atualizar um produto
 app.post('/api/estoque', async (req, res) => {
     await db.read();
     const { cnpj, nome, codigo, rua, quantidade } = req.body;
@@ -45,7 +43,6 @@ app.post('/api/estoque', async (req, res) => {
     res.status(200).json({ message: 'Produto salvo com sucesso!' });
 });
 
-// Rota para remover um produto (agora com CNPJ)
 app.delete('/api/estoque/:cnpj/:codigo', async (req, res) => {
     await db.read();
     const { cnpj, codigo } = req.params;
@@ -54,7 +51,6 @@ app.delete('/api/estoque/:cnpj/:codigo', async (req, res) => {
     res.status(200).json({ message: 'Produto removido com sucesso.' });
 });
 
-// Rota para cadastrar uma nova loja
 app.post('/api/cadastroLoja', async (req, res) => {
     await db.read();
     const { cnpj, senha } = req.body;
@@ -68,7 +64,6 @@ app.post('/api/cadastroLoja', async (req, res) => {
     res.status(201).json({ message: 'Loja cadastrada com sucesso!' });
 });
 
-// Rota para login da loja
 app.post('/api/login', async (req, res) => {
     await db.read();
     const { cnpj, senha } = req.body;
@@ -80,7 +75,6 @@ app.post('/api/login', async (req, res) => {
     res.status(401).json({ message: 'CNPJ ou senha incorretos.' });
 });
 
-// Rota para buscar um produto por código
 app.get('/api/estoque/buscar/:codigo', async (req, res) => {
     await db.read();
     const { codigo } = req.params;
@@ -92,7 +86,6 @@ app.get('/api/estoque/buscar/:codigo', async (req, res) => {
         res.status(404).json({ message: 'Produto não encontrado.' });
     }
 });
-
 
 app.listen(port, () => {
     console.log(`Backend rodando em http://localhost:${port}`);
