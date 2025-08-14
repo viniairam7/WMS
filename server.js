@@ -1,12 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { LowSync, JSONFileSync } = require('lowdb');
+const { LowSync, JSONFileSync } = require('lowdb'); // Corrigido para a sintaxe correta
 
 const file = path.join(__dirname, 'db.json');
 const adapter = new JSONFileSync(file);
 const db = new LowSync(adapter);
- 
 
 function inicializarDB() {
     db.read();
@@ -22,7 +21,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// Rota para obter todos os produtos do estoque de uma loja específica
 app.get('/api/estoque/:cnpj', (req, res) => {
     db.read();
     const { cnpj } = req.params;
@@ -30,13 +28,12 @@ app.get('/api/estoque/:cnpj', (req, res) => {
     res.json(estoqueLoja);
 });
 
-// Rota para adicionar ou atualizar um produto
 app.post('/api/estoque', (req, res) => {
     db.read();
     const { cnpj, nome, codigo, rua, quantidade } = req.body;
-    
+
     const produtoExistente = db.data.estoque.find(p => p.codigo === codigo && p.cnpj === cnpj);
-    
+
     if (produtoExistente) {
         produtoExistente.quantidade += quantidade;
     } else {
@@ -46,7 +43,6 @@ app.post('/api/estoque', (req, res) => {
     res.status(200).json({ message: 'Produto salvo com sucesso!' });
 });
 
-// Rota para remover um produto
 app.delete('/api/estoque/:codigo', (req, res) => {
     db.read();
     const { codigo } = req.params;
@@ -55,7 +51,6 @@ app.delete('/api/estoque/:codigo', (req, res) => {
     res.status(200).json({ message: 'Produto removido com sucesso.' });
 });
 
-// Rota para cadastrar uma nova loja
 app.post('/api/cadastroLoja', (req, res) => {
     db.read();
     const { cnpj, senha } = req.body;
@@ -63,13 +58,12 @@ app.post('/api/cadastroLoja', (req, res) => {
     if (db.data.lojas[cnpj]) {
         return res.status(409).json({ message: 'Este CNPJ já está cadastrado.' });
     }
-    
+
     db.data.lojas[cnpj] = senha;
     db.write();
     res.status(201).json({ message: 'Loja cadastrada com sucesso!' });
 });
 
-// Rota para login da loja
 app.post('/api/login', (req, res) => {
     db.read();
     const { cnpj, senha } = req.body;
@@ -92,7 +86,6 @@ app.get('/api/estoque/buscar/:codigo', (req, res) => {
         res.status(404).json({ message: 'Produto não encontrado.' });
     }
 });
-
 
 app.listen(port, () => {
     console.log(`Backend rodando em http://localhost:${port}`);
