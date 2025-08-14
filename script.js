@@ -1,10 +1,6 @@
 let lojaCNPJ = '';
 
-// As credenciais agora serão gerenciadas pelo backend
-// const CREDENCIAIS = { ... };
-
 window.onload = function () {
-    // A lógica de carregamento inicial será refeita
 };
 
 function fazerLogin() {
@@ -51,7 +47,6 @@ function showTab(tabName) {
         marcarBotaoAtivo('btn-cadastro');
     } else if (tabName === 'buscarProduto') {
         marcarBotaoAtivo('btn-buscar');
-        // Limpar o resultado da busca quando a aba é acessada
         document.getElementById('resultadoBusca').innerHTML = '';
         document.getElementById('codigoBarrasBusca').value = '';
     }
@@ -74,7 +69,6 @@ function salvarLoja() {
         body: JSON.stringify({ cnpj, senha })
     })
     .then(response => {
-        // Acessar a propriedade ok da resposta original antes de convertê-la
         if (response.ok) {
             return response.json();
         } else {
@@ -94,7 +88,6 @@ function salvarLoja() {
 function marcarBotaoAtivo(id) {
     document.getElementById('btn-cadastro').classList.remove('active');
     document.getElementById('btn-estoque').classList.remove('active');
-    // Adicionar a classe 'active' para o novo botão de buscar
     const btnBuscar = document.getElementById('btn-buscar');
     if (btnBuscar) {
         btnBuscar.classList.remove('active');
@@ -182,7 +175,7 @@ function filtrarEstoque() {
 
 function removerProduto(codigo) {
     if (confirm('Deseja realmente excluir este produto?')) {
-        fetch(`https://wmsback2.onrender.com/api/estoque/${codigo}`, {
+        fetch(`https://wmsback2.onrender.com/api/estoque/${lojaCNPJ}/${codigo}`, {
             method: 'DELETE'
         })
         .then(response => response.json())
@@ -197,7 +190,6 @@ function removerProduto(codigo) {
     }
 }
 
-// Essa função agora busca os dados do backend
 function carregarEstoque(filtro = '') {
     fetch(`https://wmsback2.onrender.com/api/estoque/${lojaCNPJ}`)
     .then(response => response.json())
@@ -209,10 +201,6 @@ function carregarEstoque(filtro = '') {
         document.getElementById('listaEstoque').innerHTML = '<li><em>Erro ao carregar o estoque.</em></li>';
     });
 }
-
-// ===============================================
-// FUNÇÕES PARA A NOVA FUNCIONALIDADE DE BUSCA
-// ===============================================
 
 function buscarProdutoPorCodigo() {
     const codigo = document.getElementById('codigoBarrasBusca').value.trim();
@@ -241,7 +229,6 @@ function buscarProdutoPorCodigo() {
             alert('Erro ao buscar o produto.');
         });
 }
-
 
 function startScannerBusca() {
     const cameraDiv = document.getElementById('camera');
@@ -289,7 +276,6 @@ function stopScannerBusca() {
     }
 }
 
-// A função stopScanner original também precisa ser ajustada para parar ambos os scanners
 function stopScanner() {
     if (Quagga.running) {
         Quagga.stop();
