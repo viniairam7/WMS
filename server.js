@@ -1,8 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const { Low, JSONFile } = require('lowdb');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { Low } from 'lowdb';
+import { JSONFile } from 'lowdb/node';
+import { fileURLToPath } from 'url';
 
+// Configura __dirname no ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Configuração do banco
 const file = path.join(__dirname, 'db.json');
 const adapter = new JSONFile(file);
 const db = new Low(adapter);
@@ -13,7 +20,7 @@ async function inicializarDB() {
     await db.write();
 }
 
-inicializarDB();
+await inicializarDB();
 
 const app = express();
 const port = process.env.PORT || 3000;
