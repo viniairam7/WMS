@@ -1,15 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-
-// Importação corrigida para lowdb v5+
+const path = require('path');
 const { Low, JSONFile } = require('lowdb');
-const { dirname } = require('path');
-const { fileURLToPath } = require('url');
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const file = new URL('db.json', import.meta.url);
-const db = new Low(new JSONFile(file));
+const file = path.join(__dirname, 'db.json');
+const adapter = new JSONFile(file);
+const db = new Low(adapter);
 
 async function inicializarDB() {
     await db.read();
