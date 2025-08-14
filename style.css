@@ -1,10 +1,8 @@
 body {
     margin: 0;
     padding: 0;
-    /* Gradiente de azul escuro */
     background: linear-gradient(to right, #0a1931, #1f2e4d);
     color: #ffffff;
-    /* Fonte mais robusta */
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: center;
     font-size: 16px;
@@ -12,28 +10,28 @@ body {
 
 h1, h2 {
     margin-top: 20px;
-    font-size: 1.8em; /* Slightly larger for emphasis */
+    font-size: 1.8em;
 }
 
 .tabs {
     margin-top: 20px;
-    display: flex; /* Use flexbox for tabs */
+    display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+    flex-wrap: wrap;
 }
 
 .tabs button {
-    background-color: #7aa0f8; /* Azul mais escuro */
+    background-color: #7aa0f8;
     border: none;
-    padding: 15px 25px; /* Increased padding for easier tapping */
-    margin: 8px; /* Increased margin */
+    padding: 15px 25px;
+    margin: 8px;
     cursor: pointer;
     font-weight: bold;
     color: white;
-    border-radius: 8px; /* Slightly more rounded */
+    border-radius: 8px;
     transition: background-color 0.3s ease;
-    flex-grow: 1; /* Allow buttons to grow */
-    max-width: 200px; /* Max width for individual buttons */
+    flex-grow: 1;
+    max-width: 200px;
 }
 
 .tabs button:hover,
@@ -42,20 +40,19 @@ h1, h2 {
 }
 
 input[type="text"], input[type="number"], input[type="password"] {
-    width: 90%; /* Increased width for better mobile input */
-    max-width: 400px; /* Max width for inputs */
-    padding: 15px; /* Increased padding */
-    margin: 12px auto; /* Centered with auto margins */
+    width: 90%;
+    max-width: 400px;
+    padding: 15px;
+    margin: 12px auto;
     border: none;
-    border-radius: 8px; /* Slightly more rounded */
-    font-size: 1.1em; /* Larger font size for inputs */
-    /* Fundo semi-transparente para o novo gradiente */
+    border-radius: 8px;
+    font-size: 1.1em;
     background-color: rgba(255, 255, 255, 0.1); 
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
     text-align: center;
-    display: block; /* Ensure inputs take full line */
-    box-sizing: border-box; /* Include padding in width */
+    display: block;
+    box-sizing: border-box;
 }
 
 input::placeholder {
@@ -65,16 +62,16 @@ input::placeholder {
 button {
     background-color: #7aa0f8;
     border: none;
-    padding: 15px 25px; /* Increased padding */
-    margin: 10px auto; /* Centered with auto margins */
+    padding: 15px 25px;
+    margin: 10px auto;
     cursor: pointer;
     font-weight: bold;
     color: white;
-    border-radius: 8px; /* Slightly more rounded */
+    border-radius: 8px;
     transition: background-color 0.3s ease;
-    display: block; /* Ensure buttons take full line */
-    width: 90%; /* Increased width */
-    max-width: 300px; /* Max width for buttons */
+    display: block;
+    width: 90%;
+    max-width: 300px;
     box-sizing: border-box;
 }
 
@@ -96,8 +93,8 @@ a:hover {
 }
 
 #camera {
-    width: 90%; /* Make camera responsive */
-    max-width: 320px; /* Keep a max-width */
+    width: 90%;
+    max-width: 320px;
     height: 240px;
     margin: 20px auto;
     border: 2px solid #ffffff;
@@ -114,36 +111,36 @@ a:hover {
 
 #listaEstoque li {
     background-color: #5a85f0;
-    margin: 12px auto; /* Adjusted margin */
-    padding: 18px; /* Increased padding */
-    border-radius: 10px; /* More rounded */
-    width: 90%; /* Increased width */
-    max-width: 500px; /* Max width for list items */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Enhanced shadow */
+    margin: 12px auto;
+    padding: 18px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     display: flex;
-    flex-direction: column; /* Stack content vertically on small screens */
-    align-items: flex-start; /* Align text to the start */
+    flex-direction: column;
+    align-items: flex-start;
     color: white;
-    text-align: left; /* Align text within list item */
+    text-align: left;
 }
 
 #listaEstoque li div {
-    margin-bottom: 10px; /* Space between text and button */
-    width: 100%; /* Ensure text div takes full width */
+    margin-bottom: 10px;
+    width: 100%;
 }
 
 #listaEstoque li button {
     background-color: #ff5c5c;
-    padding: 10px 15px; /* Adjusted padding */
+    padding: 10px 15px;
     border-radius: 6px;
     border: none;
     cursor: pointer;
     color: white;
     font-weight: bold;
-    align-self: flex-end; /* Align button to the end */
-    width: auto; /* Allow button to size naturally */
-    max-width: none; /* Remove max-width constraint for this button */
-    margin: 0; /* Reset margin */
+    align-self: flex-end;
+    width: auto;
+    max-width: none;
+    margin: 0;
 }
 
 #listaEstoque li button:hover {
@@ -151,16 +148,16 @@ a:hover {
 }
 
 #filtro {
-    width: 90%; /* Increased width for filter */
-    max-width: 400px; /* Max width for filter */
-    padding: 15px; /* Increased padding */
+    width: 90%;
+    max-width: 400px;
+    padding: 15px;
     margin-bottom: 20px;
     border-radius: 8px;
     border: none;
     background-color: #5a85f0;
     color: white;
     text-align: center;
-    font-size: 1.1em; /* Larger font size for filter */
+    font-size: 1.1em;
     box-sizing: border-box;
 }
 
@@ -172,7 +169,6 @@ a:hover {
     margin-top: 50px;
 }
 
-/* Media Queries for smaller screens */
 @media (max-width: 768px) {
     h1 {
         font-size: 1.6em;
@@ -189,7 +185,7 @@ a:hover {
     }
 
     input[type="text"], input[type="number"], input[type="password"], button, #filtro {
-        width: 95%; /* Even wider on very small screens */
+        width: 95%;
         font-size: 1em;
         padding: 12px;
     }
@@ -210,7 +206,7 @@ a:hover {
     }
 
     .tabs button {
-        width: 90%; /* Make tabs stack on very small screens */
+        width: 90%;
         max-width: none;
     }
 
