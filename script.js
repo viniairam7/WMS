@@ -1,7 +1,6 @@
 let lojaCNPJ = '';
 
-window.onload = function () {
-};
+window.onload = function () {};
 
 function fazerLogin() {
     const cnpj = document.getElementById('cnpj').value;
@@ -9,9 +8,7 @@ function fazerLogin() {
 
     fetch('https://wmsback2.onrender.com/api/login', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cnpj, senha })
     })
     .then(response => {
@@ -32,12 +29,8 @@ function fazerLogin() {
 }
 
 function showTab(tabName) {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('cadastroLoja').style.display = 'none';
-    document.getElementById('cadastro').style.display = 'none';
-    document.getElementById('estoque').style.display = 'none';
-    document.getElementById('buscarProduto').style.display = 'none';
-    
+    const tabs = ['login', 'cadastroLoja', 'cadastro', 'estoque', 'buscarProduto'];
+    tabs.forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById(tabName).style.display = 'block';
 
     if (tabName === 'estoque') {
@@ -63,18 +56,10 @@ function salvarLoja() {
 
     fetch('https://wmsback2.onrender.com/api/cadastroLoja', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cnpj, senha })
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Erro ao cadastrar loja.');
-        }
-    })
+    .then(response => response.ok ? response.json() : Promise.reject('Erro ao cadastrar loja.'))
     .then(data => {
         alert(data.message);
         showTab('login');
@@ -86,12 +71,10 @@ function salvarLoja() {
 }
 
 function marcarBotaoAtivo(id) {
-    document.getElementById('btn-cadastro').classList.remove('active');
-    document.getElementById('btn-estoque').classList.remove('active');
-    const btnBuscar = document.getElementById('btn-buscar');
-    if (btnBuscar) {
-        btnBuscar.classList.remove('active');
-    }
+    ['btn-cadastro', 'btn-estoque', 'btn-buscar'].forEach(btn => {
+        const el = document.getElementById(btn);
+        if (el) el.classList.remove('active');
+    });
     document.getElementById(id).classList.add('active');
 }
 
@@ -110,9 +93,7 @@ function salvarProduto() {
 
     fetch('https://wmsback2.onrender.com/api/estoque', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(novoProduto)
     })
     .then(response => response.json())
@@ -126,6 +107,65 @@ function salvarProduto() {
         console.error('Erro:', error);
         alert('Erro ao salvar o produto.');
     });
+}
+
+function atualizarProduto(codigo) {
+    const nome = document.getElementById('nomeProduto').value.trim();
+    const rua = document.getElementById('ruaProduto').value.trim();
+    const quantidade = parseInt(document.getElementById('quantidade').value);
+
+    if (!nome || !rua || !quantidade || quantidade <= 0) {
+        alert('Por favor, preencha todos os campos corretamente.');
+        return;
+    }
+
+    fetch(`https://wmsback2.onrender.com/api/estoque/${codigo}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, rua, quantidade })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.mensagem || 'Produto atualizado com sucesso.');
+        document.getElementById('codigoBarras').removeAttribute('readonly');
+        document.getElementById('salvarProdutoBtn').innerText = 'Salvar Produto';
+        document.getElementById('salvarProdutoBtn').onclick = salvarProduto;
+        limparFormulario();
+        carregarEstoque();
+        showTab('estoque');
+    })
+    .catch(error => {
+        console.error('Erro ao atualizar produto:', error);
+        alert('Erro ao atualizar o produto.');
+    });
+}
+
+function editarProduto(codigo) {
+    fetch(`https://wmsback2.onrender.com/api/estoque/buscar/${codigo}`)
+        .then(response => response.json())
+        .then(produto => {
+            if (!produto || !produto.codigo) {
+                alert('Produto não encontrado.');
+                return;
+            }
+
+            document.getElementById('nomeProduto').value = produto.nome;
+            document.getElementById('codigoBarras').value = produto.codigo;
+            document.getElementById('ruaProduto').value = produto.rua;
+            document.getElementById('quantidade').value = produto.quantidade;
+
+            document.getElementById('codigoBarras').setAttribute('readonly', true);
+            document.getElementById('salvarProdutoBtn').innerText = 'Salvar Alterações';
+            document.getElementById('salvarProdutoBtn').onclick = function () {
+                atualizarProduto(produto.codigo);
+            };
+
+            showTab('cadastro');
+        })
+        .catch(error => {
+            console.error('Erro ao buscar produto:', error);
+            alert('Erro ao buscar produto.');
+        });
 }
 
 function limparFormulario() {
@@ -162,6 +202,7 @@ function renderEstoque(estoque, filtrarTexto = '') {
                 Rua: ${item.rua}<br />
                 Quantidade: ${item.quantidade}
             </div>
+            <button onclick="editarProduto('${item.codigo}')">Editar</button>
             <button onclick="removerProduto('${item.codigo}')">Excluir</button>
         `;
         lista.appendChild(li);
@@ -233,25 +274,18 @@ function buscarProdutoPorCodigo() {
 function startScannerBusca() {
     const cameraDiv = document.getElementById('camera');
     cameraDiv.innerHTML = '';
-    
+
     Quagga.init({
         inputStream: {
-            name: "Live",
-            type: "LiveStream",
+            name: 'Live',
+            type: 'LiveStream',
             target: cameraDiv,
-            constraints: {
-                facingMode: "environment"
-            }
+            constraints: { facingMode: 'environment' }
         },
         decoder: {
-            readers: ["ean_reader", "code_128_reader", "upc_reader"]
+            readers: ['ean_reader', 'code_128_reader', 'upc_reader']
         },
-        locator: {
-            patchSize: "medium",
-            halfSample: true
-        },
-        locate: true,
-        numOfWorkers: (navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4)
+        locate: true
     }, function (err) {
         if (err) {
             alert('Erro ao iniciar o scanner: ' + err);
@@ -271,13 +305,9 @@ function startScannerBusca() {
 }
 
 function stopScannerBusca() {
-    if (Quagga.running) {
-        Quagga.stop();
-    }
+    if (Quagga.running) Quagga.stop();
 }
 
 function stopScanner() {
-    if (Quagga.running) {
-        Quagga.stop();
-    }
+    if (Quagga.running) Quagga.stop();
 }
