@@ -93,6 +93,50 @@ app.get('/api/estoque/buscar/:codigo', async (req, res) => {
     }
 });
 
+// Atualiza um item do estoque
+app.put('/api/estoque/:codigo', async (req, res) => {
+    await db.read();
+    const { codigo } = req.params;
+    const itemIndex = db.data.estoque.findIndex(p => p.codigo === codigo);
+    
+    if (itemIndex === -1) {
+        return res.status(404).json({ mensagem: 'Produto não encontrado.' });
+    }
+
+    db.data.estoque[itemIndex] = { ...db.data.estoque[itemIndex], ...req.body };
+    await db.write();
+
+    res.json({ mensagem: 'Produto atualizado com sucesso.', produto: db.data.estoque[itemIndex] });
+});
+
+app.delete('/api/estoque/:codigo', async (req, res) => {
+    await db.read();
+    const { codigo } = req.params;
+    const estoqueAntes = db.data.estoque.length;
+    
+    db.data.estoque = db.data.estoque.filter(p => p.codigo !== codigo);
+    await db.write();
+
+    if (estoqueAntes === db.data.estoque.length) {
+        return res.status(404).json({ mensagem: 'Produto não encontrado.' });
+    }
+
+    res.json({ mensagem: 'Produto removido com sucesso.' });
+});
+
+app.get('/api/estoque/codigo/:codigo', async (req, res) => {
+    await db.read();
+    const { codigo } = req.params;
+    const produto = db.data.estoque.find(p => p.codigo === codigo);
+
+    if (!produto) {
+        return res.status(404).json({ mensagem: 'Produto não encontrado.' });
+    }
+
+    res.json(produto);
+});
+
+
 app.listen(port, () => {
     console.log(`Backend rodando em http://localhost:${port}`);
 });
