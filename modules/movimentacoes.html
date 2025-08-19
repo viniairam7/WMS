@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>WMS - Movimentações</title>
+</head>
+<body>
+  <h1>WMS - Movimentações</h1>
+
+  <h2>Registrar Entrada</h2>
+  <form id="entradaForm">
+    Código do Produto: <input type="text" id="entradaCodigo"><br>
+    Quantidade: <input type="number" id="entradaQuantidade"><br>
+    Rua: <input type="text" id="entradaRua">
+    Coluna: <input type="number" id="entradaColuna">
+    Posição: <input type="number" id="entradaPosicao"><br>
+    Motivo: <input type="text" id="entradaMotivo"><br>
+    <button type="submit">Registrar Entrada</button>
+  </form>
+
+  <h2>Registrar Saída</h2>
+  <form id="saidaForm">
+    Código do Produto: <input type="text" id="saidaCodigo"><br>
+    Quantidade: <input type="number" id="saidaQuantidade"><br>
+    Rua: <input type="text" id="saidaRua">
+    Coluna: <input type="number" id="saidaColuna">
+    Posição: <input type="number" id="saidaPosicao"><br>
+    Motivo: <input type="text" id="saidaMotivo"><br>
+    <button type="submit">Registrar Saída</button>
+  </form>
+
+  <h2>Transferência</h2>
+  <form id="transferenciaForm">
+    Código do Produto: <input type="text" id="transfCodigo"><br>
+    Quantidade: <input type="number" id="transfQuantidade"><br>
+    Origem - Rua: <input type="text" id="transfOrigemRua">
+    Coluna: <input type="number" id="transfOrigemColuna">
+    Posição: <input type="number" id="transfOrigemPosicao"><br>
+    Destino - Rua: <input type="text" id="transfDestinoRua">
+    Coluna: <input type="number" id="transfDestinoColuna">
+    Posição: <input type="number" id="transfDestinoPosicao"><br>
+    Motivo: <input type="text" id="transfMotivo"><br>
+    <button type="submit">Registrar Transferência</button>
+  </form>
+
+  <h2>Histórico de Movimentações</h2>
+  Código do Produto: <input type="text" id="historicoCodigo">
+  <button onclick="buscarHistorico()">Buscar</button>
+  <ul id="historicoResultado"></ul>
+
+  <h2>Cadastrar Endereço</h2>
+  <form id="enderecoForm">
+    Rua: <input type="text" id="endRua">
+    Coluna: <input type="number" id="endColuna">
+    Posição: <input type="number" id="endPosicao"><br>
+    <button type="submit">Cadastrar Endereço</button>
+  </form>
+
+  <script>
+    const api = 'http://localhost:3000/api/movimentacoes';
+
+    document.getElementById('entradaForm').addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(api + '/entrada', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          produtoCodigo: document.getElementById('entradaCodigo').value,
+          quantidade: parseInt(document.getElementById('entradaQuantidade').value),
+          destino: {
+            rua: document.getElementById('entradaRua').value,
+            coluna: parseInt(document.getElementById('entradaColuna').value),
+            posicao: parseInt(document.getElementById('entradaPosicao').value)
+          },
+          motivo: document.getElementById('entradaMotivo').value
+        })
+      }).then(res => res.json()).then(alerta => alert(alerta.message));
+    });
+
+    document.getElementById('saidaForm').addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(api + '/saida', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          produtoCodigo: document.getElementById('saidaCodigo').value,
+          quantidade: parseInt(document.getElementById('saidaQuantidade').value),
+          origem: {
+            rua: document.getElementById('saidaRua').value,
+            coluna: parseInt(document.getElementById('saidaColuna').value),
+            posicao: parseInt(document.getElementById('saidaPosicao').value)
+          },
+          motivo: document.getElementById('saidaMotivo').value
+        })
+      }).then(res => res.json()).then(alerta => alert(alerta.message));
+    });
+
+    document.getElementById('transferenciaForm').addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(api + '/transferencia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          produtoCodigo: document.getElementById('transfCodigo').value,
+          quantidade: parseInt(document.getElementById('transfQuantidade').value),
+          origem: {
+            rua: document.getElementById('transfOrigemRua').value,
+            coluna: parseInt(document.getElementById('transfOrigemColuna').value),
+            posicao: parseInt(document.getElementById('transfOrigemPosicao').value)
+          },
+          destino: {
+            rua: document.getElementById('transfDestinoRua').value,
+            coluna: parseInt(document.getElementById('transfDestinoColuna').value),
+            posicao: parseInt(document.getElementById('transfDestinoPosicao').value)
+          },
+          motivo: document.getElementById('transfMotivo').value
+        })
+      }).then(res => res.json()).then(alerta => alert(alerta.message));
+    });
+
+    function buscarHistorico() {
+      const codigo = document.getElementById('historicoCodigo').value;
+      fetch(`${api}/historico/${codigo}`)
+        .then(res => res.json())
+        .then(data => {
+          const lista = document.getElementById('historicoResultado');
+          lista.innerHTML = '';
+          if (data.message) {
+            lista.innerHTML = `<li>${data.message}</li>`;
+          } else {
+            data.forEach(mov => {
+              const li = document.createElement('li');
+              li.textContent = `${mov.tipo.toUpperCase()} - Qtd: ${mov.quantidade} - Data: ${new Date(mov.data).toLocaleString()} - Motivo: ${mov.motivo}`;
+              lista.appendChild(li);
+            });
+          }
+        });
+    }
+
+    document.getElementById('enderecoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(api + '/enderecos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rua: document.getElementById('endRua').value,
+          coluna: parseInt(document.getElementById('endColuna').value),
+          posicao: parseInt(document.getElementById('endPosicao').value)
+        })
+      }).then(res => res.json()).then(alerta => alert(alerta.message));
+    });
+  </script>
+</body>
+</html>
