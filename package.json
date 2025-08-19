@@ -1,19 +1,24 @@
 {
   "name": "wms-main",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
-  "description": "This is a simple web-based Warehouse Management System (WMS) designed for small businesses like pizzerias. It allows you to:",
-  "main": "script.js",
+  "description": "Sistema WMS simples e web-based para pequenos comércios. Permite controle de produtos, movimentações de estoque e endereçamento físico no armazém.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["WMS", "estoque", "node", "express", "lowdb"],
+  "author": "Seu Nome",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "lowdb": "^5.1.0"
+    "lowdb": "^5.1.0",
+    "nanoid": "^5.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
+
