@@ -4,7 +4,7 @@ import path from 'path';
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 import { fileURLToPath } from 'url';
-
+import movimentacoesRoutes from './routes/movimentacoes.js'; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +26,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+
+app.use('/api/movimentacoes', movimentacoesRoutes); 
 
 app.get('/api/estoque/:cnpj', async (req, res) => {
     await db.read();
@@ -93,7 +95,6 @@ app.get('/api/estoque/buscar/:codigo', async (req, res) => {
     }
 });
 
-// Atualiza um item do estoque
 app.put('/api/estoque/:codigo', async (req, res) => {
     await db.read();
     const { codigo } = req.params;
@@ -135,7 +136,6 @@ app.get('/api/estoque/codigo/:codigo', async (req, res) => {
 
     res.json(produto);
 });
-
 
 app.listen(port, () => {
     console.log(`Backend rodando em http://localhost:${port}`);
