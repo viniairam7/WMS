@@ -1,7 +1,7 @@
-Sistema de Gestão de Armazém (WMS)
+# Sistema de Gestão de Armazém (WMS)
 Este é um sistema de gestão de armazém (WMS) simples e baseado na web, projetado para pequenas empresas. Ele foi aprimorado com um backend Node.js, garantindo que o estoque seja armazenado de forma persistente.
 
-Funcionalidades ✨
+# Funcionalidades ✨
 Cadastro de Produtos: Registre produtos com nome, código de barras, rua de armazenamento e quantidade.
 
 Leitura de Código de Barras: Utilize sua webcam para escanear códigos de barras de forma precisa.
@@ -12,7 +12,7 @@ Persistência de Dados: Os dados são salvos em um banco de dados simples (Lowdb
 
 Exclusão de Produtos: Remova produtos do estoque conforme necessário.
 
-Tecnologias Utilizadas 💻
+# Tecnologias Utilizadas 💻
 Front-end :
 
 HTML: Estrutura da página.
@@ -31,7 +31,7 @@ Express: Framework para criar as rotas da API.
 
 Lowdb: Banco de dados simples e baseado em arquivo JSON para persistência dos dados.
 
-Como Usar ▶️
+# Como Usar ▶️
 Configurar o Backend :
 
 Abra o terminal na pasta do projeto e instale as dependências: npm install.
