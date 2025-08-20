@@ -29,7 +29,7 @@ function fazerLogin() {
 }
 
 function showTab(tabName) {
-    const tabs = ['login', 'cadastroLoja', 'cadastro', 'estoque', 'buscarProduto'];
+    const tabs = ['login', 'cadastroLoja', 'cadastro', 'estoque', 'buscarProduto', 'movimentacoes']; // <- adicionamos aqui
     tabs.forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById(tabName).style.display = 'block';
 
@@ -42,8 +42,12 @@ function showTab(tabName) {
         marcarBotaoAtivo('btn-buscar');
         document.getElementById('resultadoBusca').innerHTML = '';
         document.getElementById('codigoBarrasBusca').value = '';
+    } else if (tabName === 'movimentacoes') {
+        marcarBotaoAtivo('btn-movimentacoes');
+        document.getElementById('historicoResultado').innerHTML = '';
     }
 }
+
 
 function salvarLoja() {
     const cnpj = document.getElementById('cnpjCadastro').value;
@@ -71,12 +75,13 @@ function salvarLoja() {
 }
 
 function marcarBotaoAtivo(id) {
-    ['btn-cadastro', 'btn-estoque', 'btn-buscar'].forEach(btn => {
+    ['btn-cadastro', 'btn-estoque', 'btn-buscar', 'btn-movimentacoes'].forEach(btn => {
         const el = document.getElementById(btn);
         if (el) el.classList.remove('active');
     });
     document.getElementById(id).classList.add('active');
 }
+
 
 function salvarProduto() {
     const nome = document.getElementById('nomeProduto').value.trim();
@@ -310,4 +315,133 @@ function stopScannerBusca() {
 
 function stopScanner() {
     if (Quagga.running) Quagga.stop();
+}
+
+const movimentacaoAPI = 'https://wmsback2.onrender.com/api/movimentacoes';
+
+function registrarEntrada() {
+    const produtoCodigo = document.getElementById('entradaCodigo').value;
+    const quantidade = parseInt(document.getElementById('entradaQuantidade').value);
+    const motivo = document.getElementById('entradaMotivo').value;
+    const destino = {
+        rua: document.getElementById('entradaRua').value,
+        coluna: parseInt(document.getElementById('entradaColuna').value),
+        posicao: parseInt(document.getElementById('entradaPosicao').value)
+    };
+
+    fetch(`${movimentacaoAPI}/entrada`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ produtoCodigo, quantidade, destino, motivo })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || 'Entrada registrada com sucesso');
+    })
+    .catch(err => {
+        console.error('Erro na entrada:', err);
+        alert('Erro ao registrar entrada.');
+    });
+}
+
+function registrarSaida() {
+    const produtoCodigo = document.getElementById('saidaCodigo').value;
+    const quantidade = parseInt(document.getElementById('saidaQuantidade').value);
+    const motivo = document.getElementById('saidaMotivo').value;
+    const origem = {
+        rua: document.getElementById('saidaRua').value,
+        coluna: parseInt(document.getElementById('saidaColuna').value),
+        posicao: parseInt(document.getElementById('saidaPosicao').value)
+    };
+
+    fetch(`${movimentacaoAPI}/saida`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ produtoCodigo, quantidade, origem, motivo })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || 'Saída registrada com sucesso');
+    })
+    .catch(err => {
+        console.error('Erro na saída:', err);
+        alert('Erro ao registrar saída.');
+    });
+}
+
+function registrarTransferencia() {
+    const produtoCodigo = document.getElementById('transfCodigo').value;
+    const quantidade = parseInt(document.getElementById('transfQuantidade').value);
+    const motivo = document.getElementById('transfMotivo').value;
+
+    const origem = {
+        rua: document.getElementById('transfOrigemRua').value,
+        coluna: parseInt(document.getElementById('transfOrigemColuna').value),
+        posicao: parseInt(document.getElementById('transfOrigemPosicao').value)
+    };
+
+    const destino = {
+        rua: document.getElementById('transfDestinoRua').value,
+        coluna: parseInt(document.getElementById('transfDestinoColuna').value),
+        posicao: parseInt(document.getElementById('transfDestinoPosicao').value)
+    };
+
+    fetch(`${movimentacaoAPI}/transferencia`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ produtoCodigo, quantidade, origem, destino, motivo })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || 'Transferência registrada com sucesso');
+    })
+    .catch(err => {
+        console.error('Erro na transferência:', err);
+        alert('Erro ao registrar transferência.');
+    });
+}
+
+function buscarHistoricoMovimentacao() {
+    const codigo = document.getElementById('historicoCodigo').value;
+    const lista = document.getElementById('historicoResultado');
+    lista.innerHTML = 'Carregando...';
+
+    fetch(`${movimentacaoAPI}/historico/${codigo}`)
+        .then(res => res.json())
+        .then(data => {
+            lista.innerHTML = '';
+            if (data.message) {
+                lista.innerHTML = `<li>${data.message}</li>`;
+            } else {
+                data.forEach(mov => {
+                    const li = document.createElement('li');
+                    li.textContent = `${mov.tipo.toUpperCase()} - Qtd: ${mov.quantidade} - Motivo: ${mov.motivo} - Data: ${new Date(mov.data).toLocaleString()}`;
+                    lista.appendChild(li);
+                });
+            }
+        })
+        .catch(err => {
+            console.error('Erro no histórico:', err);
+            lista.innerHTML = '<li>Erro ao buscar histórico</li>';
+        });
+}
+
+function cadastrarEndereco() {
+    const rua = document.getElementById('endRua').value;
+    const coluna = parseInt(document.getElementById('endColuna').value);
+    const posicao = parseInt(document.getElementById('endPosicao').value);
+
+    fetch(`${movimentacaoAPI}/enderecos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rua, coluna, posicao })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message || 'Endereço cadastrado com sucesso');
+    })
+    .catch(err => {
+        console.error('Erro no cadastro de endereço:', err);
+        alert('Erro ao cadastrar endereço.');
+    });
 }
