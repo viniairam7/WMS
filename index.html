@@ -31,6 +31,9 @@
         <button onclick="showTab('cadastro')" id="btn-cadastro">Cadastro de Produto</button>
         <button onclick="showTab('estoque')" id="btn-estoque">Estoque</button>
         <button onclick="showTab('buscarProduto')" id="btn-buscar">Buscar Produto</button>
+        <button onclick="showTab('movimentacoes')" id="btn-movimentacoes">Movimentações</button>
+        
+
     </div>
 
     <section id="cadastro" class="tab" style="display:none;">
@@ -61,6 +64,60 @@
         <button onclick="buscarProdutoPorCodigo()">Buscar Produto</button>
         <div id="resultadoBusca" style="margin-top: 20px;"></div>
     </section>
+
+    <section id="movimentacoes" class="tab" style="display:none;">
+    <h2>Movimentações</h2>
+
+    <h3>Registrar Entrada</h3>
+    <form id="entradaForm">
+        Código do Produto: <input type="text" id="entradaCodigo"><br>
+        Quantidade: <input type="number" id="entradaQuantidade"><br>
+        Rua: <input type="text" id="entradaRua">
+        Coluna: <input type="number" id="entradaColuna">
+        Posição: <input type="number" id="entradaPosicao"><br>
+        Motivo: <input type="text" id="entradaMotivo"><br>
+        <button type="submit">Registrar Entrada</button>
+    </form>
+
+    <h3>Registrar Saída</h3>
+    <form id="saidaForm">
+        Código do Produto: <input type="text" id="saidaCodigo"><br>
+        Quantidade: <input type="number" id="saidaQuantidade"><br>
+        Rua: <input type="text" id="saidaRua">
+        Coluna: <input type="number" id="saidaColuna">
+        Posição: <input type="number" id="saidaPosicao"><br>
+        Motivo: <input type="text" id="saidaMotivo"><br>
+        <button type="submit">Registrar Saída</button>
+    </form>
+
+    <h3>Transferência</h3>
+    <form id="transferenciaForm">
+        Código do Produto: <input type="text" id="transfCodigo"><br>
+        Quantidade: <input type="number" id="transfQuantidade"><br>
+        Origem - Rua: <input type="text" id="transfOrigemRua">
+        Coluna: <input type="number" id="transfOrigemColuna">
+        Posição: <input type="number" id="transfOrigemPosicao"><br>
+        Destino - Rua: <input type="text" id="transfDestinoRua">
+        Coluna: <input type="number" id="transfDestinoColuna">
+        Posição: <input type="number" id="transfDestinoPosicao"><br>
+        Motivo: <input type="text" id="transfMotivo"><br>
+        <button type="submit">Registrar Transferência</button>
+    </form>
+
+    <h3>Histórico de Movimentações</h3>
+    Código do Produto: <input type="text" id="historicoCodigo">
+    <button type="button" onclick="buscarHistorico()">Buscar</button>
+    <ul id="historicoResultado"></ul>
+
+    <h3>Cadastrar Endereço</h3>
+    <form id="enderecoForm">
+        Rua: <input type="text" id="endRua">
+        Coluna: <input type="number" id="endColuna">
+        Posição: <input type="number" id="endPosicao"><br>
+        <button type="submit">Cadastrar Endereço</button>
+    </form>
+</section>
+
 
     <script src="script.js"></script>
 </body>
