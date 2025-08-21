@@ -5,6 +5,8 @@ import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 import { fileURLToPath } from 'url';
 import movimentacoesRoutes from './routes/movimentacoes.js'; 
+import pedidosRoutes from './routes/pedidos.js';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +30,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/movimentacoes', movimentacoesRoutes); 
+app.use('/api/pedidos', pedidosRoutes);
+
 
 app.get('/api/estoque/:cnpj', async (req, res) => {
     await db.read();
