@@ -29,7 +29,7 @@ function fazerLogin() {
 }
 
 function showTab(tabName) {
-    const tabs = ['login', 'cadastroLoja', 'cadastro', 'estoque', 'buscarProduto', 'movimentacoes']; // <- adicionamos aqui
+    const tabs = ['login', 'cadastroLoja', 'cadastro', 'estoque', 'buscarProduto', 'movimentacoes', 'picking']; 
     tabs.forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById(tabName).style.display = 'block';
 
@@ -75,7 +75,7 @@ function salvarLoja() {
 }
 
 function marcarBotaoAtivo(id) {
-    ['btn-cadastro', 'btn-estoque', 'btn-buscar', 'btn-movimentacoes'].forEach(btn => {
+    ['btn-cadastro', 'btn-estoque', 'btn-buscar', 'btn-movimentacoes', 'btn-picking'].forEach(btn => {
         const el = document.getElementById(btn);
         if (el) el.classList.remove('active');
     });
