@@ -32,6 +32,8 @@
         <button onclick="showTab('estoque')" id="btn-estoque">Estoque</button>
         <button onclick="showTab('buscarProduto')" id="btn-buscar">Buscar Produto</button>
         <button onclick="showTab('movimentacoes')" id="btn-movimentacoes">Movimentações</button>
+        <button onclick="showTab('picking')" id="btn-picking">Picking</button>
+
         
 
     </div>
@@ -117,6 +119,23 @@
         <button type="submit">Cadastrar Endereço</button>
     </form>
 </section>
+
+    <section id="picking" class="tab" style="display: none;">
+  <h2>Separação de Pedidos (Picking)</h2>
+
+  <div>
+    <h3>Criar Pedido</h3>
+    <textarea id="pedidoItens" placeholder='Formato: [{"codigo":"123", "quantidade":2}, {...}]' rows="5"></textarea>
+    <button onclick="criarPedido()">Criar Pedido</button>
+  </div>
+
+  <div>
+    <h3>Pedidos Pendentes</h3>
+    <ul id="listaPedidosPendentes"></ul>
+    <button onclick="carregarPedidos()">Atualizar Lista</button>
+  </div>
+</section>
+
 
 
     <script src="script.js"></script>
