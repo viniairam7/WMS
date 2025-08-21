@@ -445,3 +445,60 @@ function cadastrarEndereco() {
         alert('Erro ao cadastrar endereço.');
     });
 }
+
+function criarPedido() {
+  const raw = document.getElementById('pedidoItens').value;
+  let itens;
+
+  try {
+    itens = JSON.parse(raw);
+    if (!Array.isArray(itens)) throw new Error();
+  } catch {
+    alert("Formato inválido. Use: [{\"codigo\":\"123\", \"quantidade\":2}]");
+    return;
+  }
+
+  fetch('https://wmsback2.onrender.com/api/pedidos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ cnpj: lojaCNPJ, itens })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    document.getElementById('pedidoItens').value = '';
+    carregarPedidos();
+  });
+}
+
+function carregarPedidos() {
+  fetch('https://wmsback2.onrender.com/api/pedidos')
+    .then(res => res.json())
+    .then(pedidos => {
+      const lista = document.getElementById('listaPedidosPendentes');
+      lista.innerHTML = '';
+      pedidos
+        .filter(p => p.status === 'pendente')
+        .forEach(pedido => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <strong>ID:</strong> ${pedido.id}<br>
+            <strong>Itens:</strong> ${pedido.itens.map(i => `(${i.codigo} x${i.quantidade})`).join(', ')}<br>
+            <button onclick="finalizarPedido('${pedido.id}')">Marcar como Separado</button>
+          `;
+          lista.appendChild(li);
+        });
+    });
+}
+
+function finalizarPedido(id) {
+  fetch(`https://wmsback2.onrender.com/api/pedidos/${id}/finalizar`, {
+    method: 'PUT'
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    carregarPedidos();
+  });
+}
+
